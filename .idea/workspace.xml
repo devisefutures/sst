@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1f16615d-1075-469f-a5b1-591fabbfaf77" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/massisframework_j_text_utils.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sst/SecureSigningTool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sst/SecureSigningTool.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +41,8 @@
     "Repository.Attach.Sources": "false",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "last_opened_file_path": "/home/krow/Documents/sst",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2"
@@ -47,7 +52,7 @@
     <configuration name="sst" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="org.sst.SecureSigningTool" />
       <module name="sst" />
-      <option name="PROGRAM_PARAMETERS" value="listKeys -hsm_slot 3 -hsm_slot_pwd 1234 -p11library &quot;/etc/utimaco/libcs2_pkcs11.so&quot;" />
+      <option name="PROGRAM_PARAMETERS" value="sign -hsm_slot 3 -hsm_slot_pwd 1234 -p11library &quot;/etc/utimaco/libcs2_pkcs11.so&quot; -key_ref 6 -hash_algorithm SHA-512 -path &quot;/tmp/liblz4-java-9853791912214271511.so&quot;" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
