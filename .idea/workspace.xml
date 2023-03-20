@@ -4,19 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1f16615d-1075-469f-a5b1-591fabbfaf77" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/massisframework_j_text_utils.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/sst/SecureSigningTool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sst/SecureSigningTool.java" afterDir="false" />
-    </list>
+    <list default="true" id="074cec50-22ef-47fe-872a-1e5430d96a5d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -28,44 +27,32 @@
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectId" id="2N6R3VPdwXoymbZAuUi63nCpsbv" />
+  <component name="ProjectId" id="2NI7ZPwsX65BJwykV31Nc9vBtx6" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Downloaded.Files.Path.Enabled": "false",
+    "Downloaded.Files.Path.Enabled": "true",
     "Repository.Attach.Annotations": "false",
     "Repository.Attach.JavaDocs": "false",
     "Repository.Attach.Sources": "false",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "/home/krow/Documents/sst",
-    "project.structure.last.edited": "Modules",
+    "project.structure.last.edited": "Artifacts",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2"
   }
 }]]></component>
-  <component name="RunManager">
-    <configuration name="sst" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="org.sst.SecureSigningTool" />
-      <module name="sst" />
-      <option name="PROGRAM_PARAMETERS" value="sign -hsm_slot 3 -hsm_slot_pwd 1234 -p11library &quot;/etc/utimaco/libcs2_pkcs11.so&quot; -key_ref 6 -hash_algorithm SHA-512 -path &quot;/tmp/liblz4-java-9853791912214271511.so&quot;" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="1f16615d-1075-469f-a5b1-591fabbfaf77" name="Changes" comment="" />
-      <created>1678982348566</created>
+      <changelist id="074cec50-22ef-47fe-872a-1e5430d96a5d" name="Changes" comment="" />
+      <created>1679339799334</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1678982348566</updated>
+      <updated>1679339799334</updated>
     </task>
     <servers />
   </component>
