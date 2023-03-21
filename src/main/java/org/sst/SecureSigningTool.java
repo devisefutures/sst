@@ -51,7 +51,7 @@ public class SecureSigningTool {
     /**
      * Destoys CE
      */
-    public void tearDown() {
+    public static void tearDown() {
         try{
             CE.Finalize();
         }catch (CKRException rv){
@@ -160,6 +160,9 @@ public class SecureSigningTool {
             String[] columnNames = {"Key Ref", "Alias", "Key Type", "EC Params", "Key Size"};
             TextTable tt = new TextTable(columnNames, data);
             tt.printTable();
+
+            CE.CloseSession(session);
+            tearDown();
         }catch (CKRException rv){
             throw new RuntimeException(rv);
         }
@@ -185,11 +188,9 @@ public class SecureSigningTool {
                 ecAlgo = getEcAlgo(ecParams);
             }
 
-            try {
-                data = new String(Files.readAllBytes(Paths.get(path)));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+
+            data = new String(Files.readAllBytes(Paths.get(path)));
+
 
             if(hashAlgo == null || hashAlgo.equalsIgnoreCase("NONE") || ecAlgo.equals("Ed25519")){
 
@@ -204,22 +205,23 @@ public class SecureSigningTool {
                 System.out.println("Only Ed25519 currently supported");
                 System.exit(1);
 
-                try {
-                    MessageDigest digest = MessageDigest.getInstance(hashAlgo);
-                    byte[] hash = digest.digest(data.getBytes(StandardCharsets.UTF_8));
 
-                    CE.SignInit(session, new CKM(CKM.ECDSA), privateKey);
-                    byte[] sig = CE.Sign(session, hash);
+                MessageDigest digest = MessageDigest.getInstance(hashAlgo);
+                byte[] hash = digest.digest(data.getBytes(StandardCharsets.UTF_8));
 
-                    byte[] base64 = Base64.getEncoder().encode(sig);
+                CE.SignInit(session, new CKM(CKM.ECDSA), privateKey);
+                byte[] sig = CE.Sign(session, hash);
 
-                    System.out.println(new String(base64));
+                byte[] base64 = Base64.getEncoder().encode(sig);
 
-                } catch (NoSuchAlgorithmException | CKRException e) {
-                    throw new RuntimeException(e);
-                }
+                System.out.println(new String(base64));
+
             }
-        }catch (CKRException rv){
+
+            CE.CloseSession(session);
+            tearDown();
+
+        }catch (CKRException | IOException | NoSuchAlgorithmException rv){
             throw new RuntimeException(rv);
         }
     }
