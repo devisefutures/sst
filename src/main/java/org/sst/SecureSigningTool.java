@@ -182,20 +182,20 @@ public class SecureSigningTool {
 
             CKA ecParams = CE.GetAttributeValue(session,privateKey,CKA.EC_PARAMS);
             String ecAlgo = "";
-            String data;
+            byte[] data;
 
             if(ecParams.getValueStr() != null){
                 ecAlgo = getEcAlgo(ecParams);
             }
 
 
-            data = new String(Files.readAllBytes(Paths.get(path)));
+            data = Files.readAllBytes(Paths.get(path));
 
 
             if(hashAlgo == null || hashAlgo.equalsIgnoreCase("NONE") || ecAlgo.equals("Ed25519")){
 
                 CE.SignInit(session, new CKM(CKM.ECDSA), privateKey);
-                byte[] sig = CE.Sign(session, data.getBytes());
+                byte[] sig = CE.Sign(session, data);
 
                 byte[] base64 = Base64.getEncoder().encode(sig);
 
@@ -207,7 +207,7 @@ public class SecureSigningTool {
 
 
                 MessageDigest digest = MessageDigest.getInstance(hashAlgo);
-                byte[] hash = digest.digest(data.getBytes(StandardCharsets.UTF_8));
+                byte[] hash = digest.digest(data);
 
                 CE.SignInit(session, new CKM(CKM.ECDSA), privateKey);
                 byte[] sig = CE.Sign(session, hash);
