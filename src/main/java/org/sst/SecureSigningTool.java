@@ -9,12 +9,15 @@ import org.bouncycastle.asn1.ASN1String;
 import org.bouncycastle.asn1.x9.ECNamedCurveTable;
 import org.pkcs11.jacknji11.*;
 
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.util.Base64;
 
 public class SecureSigningTool {
@@ -24,6 +27,10 @@ public class SecureSigningTool {
     private static final Option KEY_REF = new Option("key_ref", true, "Key Reference");
     private static final Option HASH_ALGO = new Option("hash_algorithm", true, "Hash algorithm");
     private static final Option PATH = new Option("path", true, "Path of data to be signed");
+
+    private static final Option VERBOSE = new Option("verbose", false, "verbose mode");
+
+    private static boolean verbose = false;
 
     private static byte[] USER_PIN;
     private static long INITSLOT;
@@ -199,9 +206,30 @@ public class SecureSigningTool {
 
                 byte[] base64 = Base64.getEncoder().encode(sig);
 
-                System.out.println(new String(base64));
-            }else{
+                if(verbose){
+                    FileInputStream derCheck = new FileInputStream(path);
+                    // Check first byte for DER tag value
+                    int tag = derCheck.read();
+                    derCheck.close();
+                    if (tag == 0x30) {
+                        System.out.println("Found DER Tag\n");
+                        FileInputStream certRead = new FileInputStream(path);
+                        CertificateFactory cf = CertificateFactory.getInstance("X.509");
+                        X509Certificate cert = (X509Certificate) cf.generateCertificate(certRead);
+                        certRead.close();
+                        System.out.println(cert);
+                    }
 
+
+                    System.out.println("\nData to sign (HEX)\n" + Hex.b2s(data));
+                    System.out.println("\nSignature (HEX)\n" + Hex.b2s(sig) + "\n");
+                }
+
+                System.out.println(new String(base64));
+
+                verify(sig, data, privateKey, session);
+
+            }else{
                 System.out.println("Only Ed25519 currently supported");
                 System.exit(1);
 
@@ -221,9 +249,36 @@ public class SecureSigningTool {
             CE.CloseSession(session);
             tearDown();
 
-        }catch (CKRException | IOException | NoSuchAlgorithmException rv){
+        }catch (CKRException | IOException | NoSuchAlgorithmException | CertificateException rv){
             throw new RuntimeException(rv);
         }
+    }
+
+    public static void verify(byte[] sig, byte[] data, long key, long session){
+        String label = CE.GetAttributeValue(session, key, CKA.LABEL).getValueStr();
+        String id = CE.GetAttributeValue(session, key, CKA.ID).getValueStr();
+
+        if (label != null) {
+            label = label.substring(0, label.length() - 8);
+        } else {
+            label = id;
+        }
+
+        CKA[] templ = {
+                new CKA(CKA.LABEL, label+"-public"),
+        };
+        try {
+            long[] keyRefs = CE.FindObjects(session, templ);
+
+            CE.VerifyInit(session, new CKM(CKM.ECDSA), keyRefs[0]);
+            CE.Verify(session, data, sig);
+            if(verbose){
+                System.out.println("Valid Signature verified");
+            }
+        }catch (CKRException rv){
+            throw new RuntimeException("Valid signature verification failed", rv);
+        }
+
     }
 
     public static void main (String[] args) throws ParseException {
@@ -262,11 +317,13 @@ public class SecureSigningTool {
                 options.addOption(KEY_REF);
                 options.addOption(HASH_ALGO);
                 options.addOption(PATH);
+                options.addOption(VERBOSE);
                 CommandLineParser parser = new DefaultParser();
                 CommandLine cmd = parser.parse(options, args);
 
                 if (cmd.hasOption(HSM_SLOT.getOpt()) && cmd.hasOption(HSM_SLOT_PWD.getOpt()) && cmd.hasOption(P11_LIB.getOpt()) && cmd.hasOption(KEY_REF.getOpt()) && cmd.hasOption(PATH.getOpt())) {
                     setUp(cmd);
+                    if(cmd.hasOption(VERBOSE.getOpt())){verbose = true;}
                     sign(cmd.getOptionValue(KEY_REF.getOpt()), cmd.getOptionValue(HASH_ALGO.getOpt()), cmd.getOptionValue(PATH.getOpt()));
                 } else {
                     if(!cmd.hasOption(HSM_SLOT)){System.out.println("Missing HSM Slot");}
@@ -294,6 +351,7 @@ public class SecureSigningTool {
 
                 options.addOption(KEY_REF);
                 options.addOption(HASH_ALGO);
+                options.addOption(VERBOSE);
                 options.addOption(PATH);
                 System.out.println("\n");
 
